@@ -24,7 +24,22 @@ public:
         if constexpr (dimension == 1)
         {
             // TODO your code here
+        auto const start = m_grid->dual_dom_start(Direction::X);
+        auto const end   = m_grid->dual_dom_end(Direction::X) - 1;  // to avoid out-of-bounds at i+1
+
+        for (int i = start; i <= end; ++i)
+        {
+            J.x(i) = 0.0;
+            J.y(i) = -(B.z(i + 1) - B.z(i)) / dx;
+            J.z(i) =  (B.y(i + 1) - B.y(i)) / dx;
         }
+
+        // To handle boundary condn at last point
+        J.x(end + 1) = 0.0;
+        J.y(end + 1) = 0.0;
+        J.z(end + 1) = 0.0;
+    }
+        
         else
             throw std::runtime_error("Ampere not implemented for this dimension");
     }
@@ -34,3 +49,5 @@ private:
 };
 
 #endif // HYBRIDIR_AMPERE_HPP
+
+

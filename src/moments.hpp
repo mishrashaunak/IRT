@@ -18,8 +18,14 @@ void total_density(std::vector<Population<dimension>> const& populations, Field<
     for (auto const& pop : populations)
     {
         // TODO calculate the total density
+           for (std::size_t ix = 0; ix < N.data().size(); ++ix)
+    {
+        N(ix) += pop.density()(ix);
+    }
+        
     }
 }
+
 
 template<std::size_t dimension>
 void bulk_velocity(std::vector<Population<dimension>> const& populations, Field<dimension> const& N,
@@ -41,6 +47,22 @@ void bulk_velocity(std::vector<Population<dimension>> const& populations, Field<
         }
     }
     // TODO calculate bulk velocity by dividing by density N
+    for (std::size_t ix = 0; ix < N.data().size(); ++ix)
+{
+    if (N(ix) > 1e-12)  // prevent division by zero
+    {
+        V.x(ix) /= N(ix);
+        V.y(ix) /= N(ix);
+        V.z(ix) /= N(ix);
+    }
+    else
+    {
+        V.x(ix) = 0.0;
+        V.y(ix) = 0.0;
+        V.z(ix) = 0.0;
+    }
+}
+
 }
 
 #endif

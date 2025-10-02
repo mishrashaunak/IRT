@@ -75,6 +75,9 @@ target_link_libraries(hybirt PRIVATE HighFive)
 
 
 add_subdirectory(tests/boris)
+add_subdirectory(tests/moments)
+add_subdirectory(tests/ampere)
+add_subdirectory(tests/faraday)
 
 
 

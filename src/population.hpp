@@ -109,8 +109,32 @@ public:
 
 
             // TODO implement linear weighting deposit for the density and flux
-        }
+            
+        // Linear weights for left (i) and right (i+1)
+        double wl = 1.0 - reminder;
+        double wr = reminder;
+
+        double const w = particle.weight;
+        double const vx = particle.v[0];
+        double const vy = particle.v[1];
+        double const vz = particle.v[2];
+
+        // Deposit onto m_density
+        m_density(iCell)     += w * wl;
+        m_density(iCell + 1) += w * wr;
+
+        // Deposit onto m_flux
+        m_flux.x(iCell)     += w * vx * wl;
+        m_flux.x(iCell + 1) += w * vx * wr;
+
+        m_flux.y(iCell)     += w * vy * wl;
+        m_flux.y(iCell + 1) += w * vy * wr;
+
+        m_flux.z(iCell)     += w * vz * wl;
+        m_flux.z(iCell + 1) += w * vz * wr;
     }
+}
+
 
     auto& density() { return m_density; }
     auto const& density() const { return m_density; }
